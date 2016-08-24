@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwidget.cpp \
-    listfile.cpp
+    listfile.cpp \
+    listinclude.cpp
 
 HEADERS  += mainwidget.h \
-    listfile.h
+    listfile.h \
+    listinclude.h
 
 FORMS    += mainwidget.ui

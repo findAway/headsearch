@@ -5,6 +5,7 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "listfile.h"
+#include "listinclude.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -32,9 +33,15 @@ void MainWidget::DirCur()
     QLineEdit* pCurPathEdit = ui->lineEditCurPath;
 
     //QDir dir;
-    CListFile listFile(QDir::currentPath());
+//    CListFile listFile(QDir::currentPath());
+//    listFile.SeekFileType(CListFile::em_FileType_CPP);
+//    QStringList strList;
+//    listFile.StartList(strList);
+
+    //find headfiles
+    CListInclude listIncs;
     QStringList strList;
-    listFile.StartList(strList);
+    listIncs.FindIncludes(QString("./mainwidget.cpp"), strList);
 
     //显示当前路径
     pCurPathEdit->setText(QDir::currentPath());
