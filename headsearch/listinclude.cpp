@@ -54,5 +54,7 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
         }
     }
 
+    file.close();
+
     return 0;
 }
