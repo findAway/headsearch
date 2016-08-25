@@ -32,16 +32,47 @@ void MainWidget::DirCur()
     QLineEdit* pFileNumEdit = ui->lineEditFileNum;
     QLineEdit* pCurPathEdit = ui->lineEditCurPath;
 
-    //QDir dir;
-//    CListFile listFile(QDir::currentPath());
-//    listFile.SeekFileType(CListFile::em_FileType_CPP);
-//    QStringList strList;
-//    listFile.StartList(strList);
+    //list all head files into allFilesList
+    CListFile listFile(QDir::currentPath());
+    listFile.SeekFileType(CListFile::em_FileType_Head);
+    QStringList allFilesList;
+    listFile.StartList(allFilesList);
 
-    //find headfiles
+    //get headfiles from .cpp
     CListInclude listIncs;
+    QStringList strHeadsList;
+    listIncs.FindIncludes(QString("./mainwidget.cpp"), strHeadsList);
+
+    //search headfiles from allFileList, add append to strList
     QStringList strList;
-    listIncs.FindIncludes(QString("./mainwidget.cpp"), strList);
+//    for (int n = 0; n < strHeadsList.length(); n++)
+//    {
+//        QString strFileOut;
+//        int nRet = listFile.SearchFile(allFilesList, strHeadsList.at(n), &strFileOut);
+//        if (nRet == 0)
+//        {
+//            strList.append(strFileOut);
+//        }
+//    }
+    int n = 0;
+    while (true)
+    {
+        if (n == strHeadsList.length())
+        {
+            break;
+        }
+
+        QString strFileOut;
+        int nRet = listFile.SearchFile(allFilesList, strHeadsList.at(n), &strFileOut);
+        if (nRet == 0)
+        {
+            strList.append(strFileOut);
+
+            listIncs.FindIncludes(strFileOut, strHeadsList);
+        }
+
+        n++;
+    }
 
     //显示当前路径
     pCurPathEdit->setText(QDir::currentPath());

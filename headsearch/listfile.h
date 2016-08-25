@@ -30,6 +30,14 @@ public:
      */
     int StartList(QStringList& strListOut);
 
+    /**
+     * @brief SearchFile
+     * @param strFileList
+     * @param strFile
+     * @return
+     */
+    int SearchFile(const QStringList strFileList, QString strFileSearch, QString* pstrFileOut);
+
 private:
     int LoopList(const QString strDir, QStringList& strList);
 

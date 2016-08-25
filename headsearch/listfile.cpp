@@ -25,6 +25,21 @@ int CListFile::StartList(QStringList& strListOut)
     return LoopList(m_strStartDir, strListOut);
 }
 
+int CListFile::SearchFile(const QStringList strFileList, QString strFileSearch, QString* pstrFileOut)
+{
+    for (int n = 0; n < strFileList.length(); n++)
+    {
+        QString strFile = strFileList.at(n);
+        if (strFile.contains(strFileSearch))
+        {
+            *pstrFileOut = strFile;
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 int CListFile::LoopList(const QString strDir, QStringList& strList)
 {
     QDir* pCurDir = new QDir(strDir);

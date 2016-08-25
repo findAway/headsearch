@@ -45,12 +45,52 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
         //去掉最后一个换行符
         buf[lineLength - 1] = '\0';
 
-        //查找#include""
+        //查找#include""buf
         QString str(buf);
         if (str.contains("#include") && str.contains("\""))
         {
-            incListOut.append(str);
-            m_dwIncFiles++;
+            bool bStartMark = false;
+            char* pStartPos = 0;
+
+            for (unsigned int n = 0; n < strlen(buf); n++)
+            {
+                if (buf[n] == '\"' && bStartMark == false)
+                {
+                    bStartMark = true;
+                    continue;
+                }
+
+                if (bStartMark && (pStartPos == 0) && (buf[n] != ' '))
+                {
+                    pStartPos = &buf[n];
+                    continue;
+                }
+
+                if (bStartMark && (pStartPos != 0) && (buf[n] == 'h'))
+                {
+                    buf[n+1] = '\0';
+                    break;
+                }
+            }
+
+            if (pStartPos != 0)
+            {
+                bool bExist = false;
+                for (int n = 0; n < incListOut.length(); n++)
+                {
+                    if (incListOut.at(n) == pStartPos)
+                    {
+                        bExist = true;
+                        break;
+                    }
+                }
+
+                if (!bExist)
+                {
+                    incListOut.append(QString::fromUtf8(pStartPos));
+                    m_dwIncFiles++;
+                }
+            }
         }
     }
 
