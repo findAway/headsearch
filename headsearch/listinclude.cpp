@@ -4,15 +4,99 @@
 
 CListInclude::CListInclude()
 {
-    m_dwIncFiles = 0;
+    m_nListAtIndex = 0;
 }
 
 CListInclude::~CListInclude()
 {
-    m_dwIncFiles = 0;
+    m_nListAtIndex = 0;
+    while (m_cHeadFileInfoList.length() > 0)
+    {
+        THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(0);
+        m_cHeadFileInfoList.removeFirst();
+        if (pHeadFileInfo != 0)
+        {
+            delete pHeadFileInfo;
+        }
+    }
 }
 
-int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
+int CListInclude::AddNeededFile(const QString& strFile)
+{
+    int nRet = FindIncludes(strFile);
+    if (nRet == 0)
+    {
+        m_cNeededFileList.append(strFile);
+    }
+
+    return nRet;
+}
+
+int CListInclude::AddExterFile(const QString& strFile)
+{
+    int nRet = FindIncludes(strFile);
+    if (nRet == 0)
+    {
+        m_cExterFileList.append(strFile);
+    }
+
+    return nRet;
+}
+
+bool CListInclude::HasHeadFile()
+{
+    if (m_cHeadFileInfoList.length() <= 0)
+    {
+        return false;
+    }
+
+    if (m_nListAtIndex <= m_cHeadFileInfoList.length()-1)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+const QString& CListInclude::GetCurHeadFile()
+{
+    THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(m_nListAtIndex);
+    return pHeadFileInfo->strHeadFile;
+}
+
+void CListInclude::SetCurHeadFilePath(const QString& strHeadFilePath)
+{
+    THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(m_nListAtIndex);
+    pHeadFileInfo->strHeadFilePath = strHeadFilePath;
+    pHeadFileInfo->bSetPath = true;
+}
+
+void CListInclude::Next()
+{
+    if (m_nListAtIndex <= m_cHeadFileInfoList.length()-1)
+    {
+        m_nListAtIndex++;
+    }
+}
+
+void CListInclude::SeekReset()
+{
+    m_nListAtIndex = 0;
+}
+
+void CListInclude::GetOutAllHeadFilePath(QStringList& strPathListOut)
+{
+    for (int n = 0; n < m_cHeadFileInfoList.length(); n++)
+    {
+        THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(n);
+        if (pHeadFileInfo->bSetPath)
+        {
+            strPathListOut.append(pHeadFileInfo->strHeadFilePath);
+        }
+    }
+}
+
+int CListInclude::FindIncludes(const QString& strFile)
 {
     QFile file(strFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -65,9 +149,24 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
             {
                 //检查队列中是否存在相同文件名
                 bool bExist = false;
-                for (int n = 0; n < incListOut.length(); n++)
+//                for (int n = 0; n < m_cHeadFileList.length(); n++)
+//                {
+//                    if (m_cHeadFileList.at(n) == pStartPos)
+//                    {
+//                        bExist = true;
+//                        break;
+//                    }
+//                }
+
+//                if (!bExist)
+//                {
+//                    m_cHeadFileList.append(QString::fromUtf8(pStartPos));
+//                }
+
+                for (int n = 0; n < m_cHeadFileInfoList.length(); n++)
                 {
-                    if (incListOut.at(n) == pStartPos)
+                    THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(n);
+                    if (pHeadFileInfo->strHeadFile == pStartPos)
                     {
                         bExist = true;
                         break;
@@ -76,8 +175,10 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
 
                 if (!bExist)
                 {
-                    incListOut.append(QString::fromUtf8(pStartPos));
-                    m_dwIncFiles++;
+                    THeadFileInfo* pHeadFileInfo = new THeadFileInfo;
+                    pHeadFileInfo->strHeadFile = QString::fromUtf8(pStartPos);
+                    pHeadFileInfo->bSetPath = false;
+                    m_cHeadFileInfoList.append(pHeadFileInfo);
                 }
             }
         }

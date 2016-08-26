@@ -40,30 +40,24 @@ void MainWidget::DirCur()
 
     //get headfiles from .cpp
     CListInclude listIncs;
-    QStringList strHeadsList;
-    listIncs.FindIncludes(QString("./mainwidget.cpp"), strHeadsList);
+    listIncs.AddNeededFile(QString("./mainwidget.cpp"));
 
-    //search headfiles, add append to strList
-    QStringList strList;
-    int n = 0;
-    while (true)
+    //循环查找各头文件的路径
+    while (listIncs.HasHeadFile())
     {
-        if (n == strHeadsList.length())
-        {
-            break;
-        }
-
+        QString strHeadFile = listIncs.GetCurHeadFile();
         QString strFileOut;
-        int nRet = listFile.SearchFile(strHeadsList.at(n), &strFileOut);
-        if (nRet == 0)
+        if (listFile.SearchFile(strHeadFile, &strFileOut))
         {
-            strList.append(strFileOut);
-
-            listIncs.FindIncludes(strFileOut, strHeadsList);
+            listIncs.SetCurHeadFilePath(strFileOut);
         }
 
-        n++;
+        listIncs.Next();
     }
+
+    //取出所有已经查找到的头文件的完整路径
+    QStringList strList;
+    listIncs.GetOutAllHeadFilePath(strList);
 
     //显示当前路径
     pCurPathEdit->setText(QDir::currentPath());

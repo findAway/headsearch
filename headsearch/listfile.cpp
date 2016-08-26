@@ -47,7 +47,7 @@ void CListFile::CheckAndSeek()
     }
 }
 
-int CListFile::SearchFile(const QString& strFile, QString* pstrFilePathOut)
+bool CListFile::SearchFile(const QString& strFile, QString* pstrFilePathOut)
 {
     for (int n = 0; n < m_cFileList.length(); n++)
     {
@@ -55,11 +55,11 @@ int CListFile::SearchFile(const QString& strFile, QString* pstrFilePathOut)
         if (strFilePath.contains(strFile))
         {
             *pstrFilePathOut = strFilePath;
-            return 0;
+            return true;
         }
     }
 
-    return 1;
+    return false;
 }
 
 int CListFile::LoopList(const QString& strDir, QStringList& strList)
