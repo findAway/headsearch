@@ -4,15 +4,16 @@
 #include <QRegExp>
 #include "listfile.h"
 
-CListFile::CListFile(QString strDir)
+CListFile::CListFile()
 {
-    m_strStartDir = strDir;
     m_emSeekFileType = em_FileType_ALL;
+    m_nListAtIndex = 0;
 }
 
 CListFile::~CListFile()
 {
     m_emSeekFileType = em_FileType_ALL;
+    m_nListAtIndex = 0;
 }
 
 void CListFile::SeekFileType(emFileType fileType)
@@ -20,19 +21,40 @@ void CListFile::SeekFileType(emFileType fileType)
     m_emSeekFileType = fileType;
 }
 
-int CListFile::StartList(QStringList& strListOut)
+int CListFile::AddSrcDir(const QString& strDir)
 {
-    return LoopList(m_strStartDir, strListOut);
+    QDir dir(strDir);
+    if (!dir.exists())
+    {
+        return 1;
+    }
+
+    m_cSrcDirList.append(strDir);
+    return 0;
 }
 
-int CListFile::SearchFile(const QStringList strFileList, QString strFileSearch, QString* pstrFileOut)
+void CListFile::CheckAndSeek()
 {
-    for (int n = 0; n < strFileList.length(); n++)
+    if (m_cSrcDirList.length() == 0)
     {
-        QString strFile = strFileList.at(n);
-        if (strFile.contains(strFileSearch))
+        return;
+    }
+
+    while (m_nListAtIndex <= m_cSrcDirList.length()-1)
+    {
+        LoopList(m_cSrcDirList.at(m_nListAtIndex), m_cFileList);
+        m_nListAtIndex++;
+    }
+}
+
+int CListFile::SearchFile(const QString& strFile, QString* pstrFilePathOut)
+{
+    for (int n = 0; n < m_cFileList.length(); n++)
+    {
+        QString strFilePath = m_cFileList.at(n);
+        if (strFilePath.contains(strFile))
         {
-            *pstrFileOut = strFile;
+            *pstrFilePathOut = strFilePath;
             return 0;
         }
     }
@@ -40,7 +62,7 @@ int CListFile::SearchFile(const QStringList strFileList, QString strFileSearch, 
     return 1;
 }
 
-int CListFile::LoopList(const QString strDir, QStringList& strList)
+int CListFile::LoopList(const QString& strDir, QStringList& strList)
 {
     QDir* pCurDir = new QDir(strDir);
     if (!pCurDir->exists())

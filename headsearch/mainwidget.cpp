@@ -33,27 +33,18 @@ void MainWidget::DirCur()
     QLineEdit* pCurPathEdit = ui->lineEditCurPath;
 
     //list all head files into allFilesList
-    CListFile listFile(QDir::currentPath());
+    CListFile listFile;
     listFile.SeekFileType(CListFile::em_FileType_Head);
-    QStringList allFilesList;
-    listFile.StartList(allFilesList);
+    listFile.AddSrcDir(QDir::currentPath());
+    listFile.CheckAndSeek();
 
     //get headfiles from .cpp
     CListInclude listIncs;
     QStringList strHeadsList;
     listIncs.FindIncludes(QString("./mainwidget.cpp"), strHeadsList);
 
-    //search headfiles from allFileList, add append to strList
+    //search headfiles, add append to strList
     QStringList strList;
-//    for (int n = 0; n < strHeadsList.length(); n++)
-//    {
-//        QString strFileOut;
-//        int nRet = listFile.SearchFile(allFilesList, strHeadsList.at(n), &strFileOut);
-//        if (nRet == 0)
-//        {
-//            strList.append(strFileOut);
-//        }
-//    }
     int n = 0;
     while (true)
     {
@@ -63,7 +54,7 @@ void MainWidget::DirCur()
         }
 
         QString strFileOut;
-        int nRet = listFile.SearchFile(allFilesList, strHeadsList.at(n), &strFileOut);
+        int nRet = listFile.SearchFile(strHeadsList.at(n), &strFileOut);
         if (nRet == 0)
         {
             strList.append(strFileOut);

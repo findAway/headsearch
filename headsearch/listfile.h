@@ -3,6 +3,9 @@
 
 #include <QStringList>
 
+/**
+ * @brief 此类用于从给定的目录中列出所有包含文件，并将完整路径存入队列。
+ */
 class CListFile
 {
 public:
@@ -14,7 +17,7 @@ public:
     };
 
 public:
-    CListFile(QString strDir);
+    CListFile();
     ~CListFile();
 
     /**
@@ -24,27 +27,34 @@ public:
     void SeekFileType(emFileType fileType);
 
     /**
-     * @brief StartList
-     * @param strListOut 输出参数
+     * @brief AddSrcDir 添加查找目录
+     * @param strDir 目录路径
      * @return 成功返回0
      */
-    int StartList(QStringList& strListOut);
+    int AddSrcDir(const QString& strDir);
+
+    /**
+     * @brief CheckAndSeek 检查是否有未查找的目录，有就开始查找
+     */
+    void CheckAndSeek();
 
     /**
      * @brief SearchFile
-     * @param strFileList 存放文件名（完整路径）队列
      * @param strFileSearch 待查找文件名
      * @param pstrFileOut 输出查找到的文件名（完整路径）
      * @return 成功返回0
      */
-    int SearchFile(const QStringList strFileList, QString strFileSearch, QString* pstrFileOut);
+    int SearchFile(const QString& strFile, QString* pstrFilePathOut);
 
 private:
-    int LoopList(const QString strDir, QStringList& strList);
+    int LoopList(const QString& strDir, QStringList& strList);
 
 private:
-    QString m_strStartDir;
-    emFileType m_emSeekFileType;
+    emFileType  m_emSeekFileType;
+    QStringList m_cSrcDirList;     //查找目录队列
+    int         m_nListAtIndex;    //当前正在查找队列中的第几个
+
+    QStringList m_cFileList;       //从目录中查找到的文件放入此队列
 };
 
 #endif // LISTFILE
