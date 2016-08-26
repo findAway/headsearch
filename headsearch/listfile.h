@@ -32,9 +32,10 @@ public:
 
     /**
      * @brief SearchFile
-     * @param strFileList
-     * @param strFile
-     * @return
+     * @param strFileList 存放文件名（完整路径）队列
+     * @param strFileSearch 待查找文件名
+     * @param pstrFileOut 输出查找到的文件名（完整路径）
+     * @return 成功返回0
      */
     int SearchFile(const QStringList strFileList, QString strFileSearch, QString* pstrFileOut);
 

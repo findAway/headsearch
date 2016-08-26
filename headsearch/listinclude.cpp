@@ -22,19 +22,6 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
 
     while (!file.atEnd())
     {
-//        QByteArray line = file.readLine();
-//        if (line.length() == 0)
-//        {
-//            break;
-//        }
-
-//        QString str = QString::fromUtf8(line);
-//        if (str.contains("#include \""))
-//        {
-//            incListOut.append(str);
-//            m_dwIncFiles++;
-//        }
-
         char buf[512];
         qint64 lineLength = file.readLine(buf, sizeof(buf));
         if (lineLength <= 0)
@@ -45,13 +32,14 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
         //去掉最后一个换行符
         buf[lineLength - 1] = '\0';
 
-        //查找#include""buf
+        //查找 #include "headfile.h"
         QString str(buf);
         if (str.contains("#include") && str.contains("\""))
         {
             bool bStartMark = false;
             char* pStartPos = 0;
 
+            //从#include "headfile.h"中截取出headfile.h
             for (unsigned int n = 0; n < strlen(buf); n++)
             {
                 if (buf[n] == '\"' && bStartMark == false)
@@ -75,6 +63,7 @@ int CListInclude::FindIncludes(const QString strFile, QStringList &incListOut)
 
             if (pStartPos != 0)
             {
+                //检查队列中是否存在相同文件名
                 bool bExist = false;
                 for (int n = 0; n < incListOut.length(); n++)
                 {
