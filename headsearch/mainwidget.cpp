@@ -38,11 +38,24 @@ MainWidget::MainWidget(QWidget *parent) :
 MainWidget::~MainWidget()
 {
     delete ui;
-    //    if(m_pListViewModel != 0)
-    //    {
-    //        delete m_pListViewModel;
-    //        m_pListViewModel = 0;
-    //    }
+
+    if (m_pSrcPathViewModel != 0)
+    {
+        delete m_pSrcPathViewModel;
+        m_pSrcPathViewModel = 0;
+    }
+
+    if (m_pFirstFileViewModel != 0)
+    {
+        delete m_pFirstFileViewModel;
+        m_pFirstFileViewModel = 0;
+    }
+
+    if (m_pPathOutViewModel != 0)
+    {
+        delete m_pPathOutViewModel;
+        m_pPathOutViewModel = 0;
+    }
 }
 
 void MainWidget::AddSrcPath()
@@ -88,7 +101,7 @@ void MainWidget::DirCur()
     if ((m_cSrcPathList.length() == 0) || (m_cFirstFileList.length() == 0))
     {
         QMessageBox::information(this, tr("警告"),
-            tr("请添加文件搜寻路径及初始文件"), QMessageBox::Ok);
+                                 tr("请添加文件搜寻路径及初始文件"), QMessageBox::Ok);
 
         return;
     }
@@ -142,7 +155,7 @@ void MainWidget::DirCur()
     m_pListViewPathOut->setModel(m_pPathOutViewModel);
 
     QMessageBox::information(this, tr("通知"),
-        tr("处理结束"), QMessageBox::Ok);
+                             tr("处理结束"), QMessageBox::Ok);
 
     m_pBtAddSrcPath->setDisabled(false);
     m_pBtAddFirstFiles->setDisabled(false);
