@@ -161,6 +161,40 @@ int CListInclude::DeleteNeedFile(int nFileIndex)
     return 0;
 }
 
+int CListInclude::HeadFileMoreInfo(int nFileIndex, QStringList& fileListOut)
+{
+    if (nFileIndex >= m_cHeadFileInfoList.length())
+    {
+        return 1;
+    }
+
+    THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(nFileIndex);
+    if (pHeadFileInfo != 0)
+    {
+        for (int n = 0; n < pHeadFileInfo->refFileList.length(); n++)
+        {
+            bool bInNeedList = pHeadFileInfo->refFileList.at(n)->bInNeedList;
+            int nFileIndex = pHeadFileInfo->refFileList.at(n)->nRefFileIndex;
+            if (bInNeedList)
+            {
+                if (nFileIndex <= m_cNeededFileList.length()-1)
+                {
+                    fileListOut.append(m_cNeededFileList.at(nFileIndex));
+                }
+            }
+            else
+            {
+                if (nFileIndex <= m_cExterFileList.length()-1)
+                {
+                    fileListOut.append(m_cExterFileList.at(nFileIndex));
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
 void CListInclude::GetOutAllHeadFilePath(QStringList& strPathListOut)
 {
     for (int n = 0; n < m_cHeadFileInfoList.length(); n++)

@@ -95,7 +95,7 @@ debug/icon_res.o: icon.rc
 	windres -i icon.rc -o debug\icon_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ -o Makefile.Debug headsearch.pro
+	@$(QMAKE) -spec win32-g++ "CONFIG+=debug" -o Makefile.Debug headsearch.pro
 
 qmake_all: FORCE
 
@@ -254,6 +254,10 @@ debug/moc_mainwidget.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidge
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qrubberband.h \
+		listfile.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList \
+		listinclude.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList \
 		mainwidget.h
 	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore mainwidget.h -o debug\moc_mainwidget.cpp
 
@@ -404,6 +408,10 @@ debug/main.o: main.cpp mainwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qrubberband.h \
+		listfile.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList \
+		listinclude.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QApplication \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qcoreapplication.h \
@@ -554,6 +562,10 @@ debug/mainwidget.o: mainwidget.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QPushButton \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qpushbutton.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qabstractbutton.h \
+		listfile.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList \
+		listinclude.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList \
 		ui_mainwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QVariant \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QAction \
@@ -579,11 +591,7 @@ debug/mainwidget.o: mainwidget.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QLabel \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QVBoxLayout \
-		listfile.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList \
-		listinclude.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwidget.o mainwidget.cpp
 
 debug/listfile.o: listfile.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QDir \
@@ -710,9 +718,16 @@ debug/listinclude.o: listinclude.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCor
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qisenum.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qobject_impl.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QByteArray \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QDir \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qdir.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qfileinfo.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qshareddata.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qhash.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qpair.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QFileInfo \
 		listinclude.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringList
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QList
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\listinclude.o listinclude.cpp
 
 debug/qrc_icon.o: debug/qrc_icon.cpp 

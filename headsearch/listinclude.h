@@ -87,6 +87,13 @@ public:
     int DeleteNeedFile(int nFileIndex);
 
     /**
+     * @brief HeadFileMoreInfo 头文件的相关详细信息，被哪个文件引用等
+     * @param nFileIndex
+     * @return
+     */
+    int HeadFileMoreInfo(int nFileIndex, QStringList& fileListOut);
+
+    /**
      * @brief 取出所有已经查找到的头文件的完整路径
      * @param strPathListOut 输出完整路径的队列
      */

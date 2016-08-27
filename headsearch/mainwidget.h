@@ -27,6 +27,8 @@ public slots:
 
     void DelNeedFile(const QModelIndex& index); //删除一项需要的文件
 
+    void ShowPathOutInfo(const QModelIndex& index); //输出项的详情
+
 private:
     Ui::MainWidget *ui;
 

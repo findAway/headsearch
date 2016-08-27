@@ -35,6 +35,7 @@ MainWidget::MainWidget(QWidget *parent) :
     QObject::connect(m_pBtStart, SIGNAL(clicked()), this, SLOT(DirCur()));
 
     QObject::connect(m_pListViewNeedFiles, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(DelNeedFile(QModelIndex)));
+    QObject::connect(m_pListViewPathOut, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(ShowPathOutInfo(QModelIndex)));
 }
 
 MainWidget::~MainWidget()
@@ -159,6 +160,7 @@ void MainWidget::DirCur()
         if (m_cListFiles.SearchFile(strHeadFile, strFileOut))
         {
             m_cListInclude.SetCurHeadFilePath(strFileOut);
+            m_cListInclude.AddExterFile(strFileOut);
         }
 
         m_cListInclude.Next();
@@ -182,16 +184,16 @@ void MainWidget::DirCur()
     QMessageBox::information(this, tr("通知"),
                              tr("处理结束"), QMessageBox::Ok);
 
-//    m_pBtAddSrcPath->setDisabled(false);
-//    m_pBtAddNeedPath->setDisabled(false);
-//    m_pBtStart->setDisabled(false);
+    //    m_pBtAddSrcPath->setDisabled(false);
+    //    m_pBtAddNeedPath->setDisabled(false);
+    //    m_pBtStart->setDisabled(false);
 }
 
 void MainWidget::DelNeedFile(const QModelIndex & index)
 {
     int nRow = index.row();
     int nRet = QMessageBox::information(this, tr("警告"),
-                             tr("确定删除此文件吗?"), QMessageBox::Ok|QMessageBox::No, QMessageBox::No);
+                                        tr("确定删除此文件吗?"), QMessageBox::Ok|QMessageBox::No, QMessageBox::No);
 
     if (nRet == QMessageBox::No)
     {
@@ -211,4 +213,31 @@ void MainWidget::DelNeedFile(const QModelIndex & index)
     }
 
     m_pListViewNeedFiles->setModel(m_pNeedFileViewModel);
+}
+
+void MainWidget::ShowPathOutInfo(const QModelIndex& index)
+{
+    int nRow = index.row();
+
+    QStringList headFileInfoList;
+    m_cListInclude.HeadFileMoreInfo(nRow, headFileInfoList);
+    if (headFileInfoList.length() == 0)
+    {
+        QMessageBox::information(this, tr("警告"),
+                                 tr("为找到引用文件"), QMessageBox::Ok);
+    }
+    else
+    {
+        QString info;
+        info += tr("引用文件：");
+        for (int n = 0; n < headFileInfoList.length(); n++)
+        {
+            info += tr("\n");
+            info += headFileInfoList.at(n);
+        }
+
+        QMessageBox::information(this, tr("警告"),
+                                 info,
+                                 QMessageBox::Ok);
+    }
 }
