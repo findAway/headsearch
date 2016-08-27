@@ -4,11 +4,18 @@
 #include <QList>
 #include <QStringList>
 
+typedef struct tagHeadRefFile
+{
+    bool bInNeedList;
+    int nRefFileIndex;
+} THeadRefFile;
+
 typedef struct tagHeadFileInfo
 {
     QString strHeadFile;
     bool    bSetPath;
     QString strHeadFilePath;
+    QList<THeadRefFile*> refFileList;  //包含此头文件的源文件
 } THeadFileInfo;
 
 /**
@@ -33,11 +40,23 @@ public:
     int AddNeededFile(const QString& strFile);
 
     /**
+     * @brief AddNeededPath 添加待查找头文件的源文件所在路径
+     * @param strPath 目录路径
+     * @return
+     */
+    int AddNeededPath(const QString& strPath);
+
+    /**
      * @brief AddExterFile 添加额外需要的文件
      * @param strFile 文件名
      * @return 成功返回0
      */
     int AddExterFile(const QString& strFile);
+
+    /**
+     * @brief FindAllIncludes 找出所有源文件中的头文件
+     */
+    void FindAllIncludes();
 
     /**
      * @brief 以下几个函数用于从m_cHeadFileList依次取出头文件。
@@ -55,6 +74,19 @@ public:
     void SeekReset();
 
     /**
+     * @brief GetOutAllNeedFiles 取出所有源文件
+     * @param strFilesListOut 输出文件队列
+     */
+    const QStringList& GetOutAllNeedFiles();
+
+    /**
+     * @brief DeleteNeedFile 删除源文件
+     * @param nFileIndex
+     * @return
+     */
+    int DeleteNeedFile(int nFileIndex);
+
+    /**
      * @brief 取出所有已经查找到的头文件的完整路径
      * @param strPathListOut 输出完整路径的队列
      */
@@ -62,11 +94,11 @@ public:
 
 private:
     /**
-     * @brief FindIncludes
+     * @brief FindIncludes 从文件中找出包含的头文件
      * @param strFile 被查找的源文件名
      * @return 成功返回0
      */
-    int FindIncludes(const QString& strFile);
+    int FindIncludes(const QString& strFile, int nFileIndex, bool bInNeededList);
 
 private:
     QStringList m_cNeededFileList;

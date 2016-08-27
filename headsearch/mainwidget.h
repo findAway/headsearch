@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QStringListModel>
 #include <QListView>
+#include "listfile.h"
+#include "listinclude.h"
 
 namespace Ui {
 class MainWidget;
@@ -20,26 +22,32 @@ public:
 
 public slots:
     void AddSrcPath();
-    void AddFirstFile();
+    void AddNeedPath();
     void DirCur();  //列出当前目录文件，包括子目录
+
+    void DelNeedFile(const QModelIndex& index); //删除一项需要的文件
 
 private:
     Ui::MainWidget *ui;
 
     QPushButton*  m_pBtAddSrcPath;
-    QPushButton*  m_pBtAddFirstFiles;
+    QPushButton*  m_pBtAddNeedPath;
     QPushButton*  m_pBtStart;
 
     QListView* m_pListViewSrcPath;
-    QListView* m_pListViewFirstFiles;
+    QListView* m_pListViewNeedFiles;
     QListView* m_pListViewPathOut;
 
     QStringList m_cSrcPathList;
-    QStringList m_cFirstFileList;
+    QStringList m_cNeedPathList;
+    QStringList m_cNeedFileList;
 
     QStringListModel* m_pSrcPathViewModel;
-    QStringListModel* m_pFirstFileViewModel;
+    QStringListModel* m_pNeedFileViewModel;
     QStringListModel* m_pPathOutViewModel;
+
+    CListFile    m_cListFiles;
+    CListInclude m_cListInclude;
 };
 
 #endif // MAINWIDGET_H

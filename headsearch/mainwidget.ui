@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>521</height>
+    <width>579</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
        <item>
         <widget class="QPushButton" name="btAddSrcPath">
          <property name="text">
-          <string>添加文件搜寻路径</string>
+          <string>添加</string>
          </property>
         </widget>
        </item>
@@ -75,7 +75,7 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>初始文件</string>
+          <string>源代码路径</string>
          </property>
         </widget>
        </item>
@@ -93,9 +93,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btAddFirstFiles">
+        <widget class="QPushButton" name="btAddNeedPath">
          <property name="text">
-          <string>添加初始文件</string>
+          <string>添加</string>
          </property>
         </widget>
        </item>
@@ -103,16 +103,10 @@
      </item>
      <item>
       <widget class="QListView" name="listViewFirstFiles">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>121</height>
-        </size>
-       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>121</height>
+         <height>161</height>
         </size>
        </property>
       </widget>

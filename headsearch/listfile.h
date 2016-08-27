@@ -44,7 +44,7 @@ public:
      * @param pstrFileOut 输出查找到的文件名（完整路径）
      * @return 成功返回0
      */
-    bool SearchFile(const QString& strFile, QString* pstrFilePathOut);
+    bool SearchFile(const QString& strFile, QString& strFilePathOut);
 
 private:
     int LoopList(const QString& strDir, QStringList& strList);

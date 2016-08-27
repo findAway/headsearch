@@ -17,13 +17,13 @@ CXXFLAGS      = -pipe -fno-keep-inline-dllexport -O2 -frtti -Wall -Wextra -fexce
 INCPATH       = -I. -IC:\Qt\Qt5.5.1\5.5\mingw492_32\include -IC:\Qt\Qt5.5.1\5.5\mingw492_32\include\QtWidgets -IC:\Qt\Qt5.5.1\5.5\mingw492_32\include\QtGui -IC:\Qt\Qt5.5.1\5.5\mingw492_32\include\QtANGLE -IC:\Qt\Qt5.5.1\5.5\mingw492_32\include\QtCore -Irelease -I. -IC:\Qt\Qt5.5.1\5.5\mingw492_32\mkspecs\win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,windows -mthreads
-LIBS        =        -lmingw32 -LC:/Qt/Qt5.5.1/5.5/mingw492_32/lib -lqtmain -lshell32 -lQt5Widgets -lQt5Gui -lQt5Core 
+LIBS        =        -lmingw32 -LC:/Qt/Qt5.5.1/5.5/mingw492_32/lib -lqtmain -lshell32 -lQt5Widgets -lQt5Gui -lQt5Core release\icon_res.o 
 QMAKE         = C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = release\icon_res.o
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -55,9 +55,10 @@ OBJECTS       = release/main.o \
 		release/qrc_icon.o \
 		release/moc_mainwidget.o
 
-DIST          =  mainwidget.h \
+DIST          = icon.rc mainwidget.h \
 		listfile.h \
-		listinclude.h main.cpp \
+		listinclude.h \
+		ui_mainwidget.h main.cpp \
 		mainwidget.cpp \
 		listfile.cpp \
 		listinclude.cpp
@@ -87,8 +88,11 @@ DESTDIR_TARGET = release\headsearch.exe
 first: all
 all: Makefile.Release  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwidget.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwidget.h $(OBJECTS) release/icon_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
+
+release/icon_res.o: icon.rc
+	windres -i icon.rc -o release\icon_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ -o Makefile.Release headsearch.pro
@@ -100,6 +104,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) release\main.o release\mainwidget.o release\listfile.o release\listinclude.o release\qrc_icon.o release\moc_mainwidget.o
+	-$(DEL_FILE) release\icon_res.o
 
 distclean: clean 
 	-$(DEL_FILE) $(DESTDIR_TARGET)

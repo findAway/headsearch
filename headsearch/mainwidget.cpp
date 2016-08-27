@@ -16,23 +16,25 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->setupUi(this);
 
     m_pBtAddSrcPath = ui->btAddSrcPath;
-    m_pBtAddFirstFiles = ui->btAddFirstFiles;
+    m_pBtAddNeedPath = ui->btAddNeedPath;
     m_pBtStart = ui->btStart;
 
     m_pListViewSrcPath = ui->listViewSrcPath;
-    m_pListViewFirstFiles = ui->listViewFirstFiles;
+    m_pListViewNeedFiles = ui->listViewFirstFiles;
     m_pListViewPathOut = ui->listViewPathOut;
     m_pListViewSrcPath->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_pListViewFirstFiles->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_pListViewNeedFiles->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_pListViewPathOut->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     m_pSrcPathViewModel = 0;
-    m_pFirstFileViewModel = 0;
+    m_pNeedFileViewModel = 0;
     m_pPathOutViewModel = 0;
 
     QObject::connect(m_pBtAddSrcPath, SIGNAL(clicked()), this, SLOT(AddSrcPath()));
-    QObject::connect(m_pBtAddFirstFiles, SIGNAL(clicked()), this, SLOT(AddFirstFile()));
+    QObject::connect(m_pBtAddNeedPath, SIGNAL(clicked()), this, SLOT(AddNeedPath()));
     QObject::connect(m_pBtStart, SIGNAL(clicked()), this, SLOT(DirCur()));
+
+    QObject::connect(m_pListViewNeedFiles, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(DelNeedFile(QModelIndex)));
 }
 
 MainWidget::~MainWidget()
@@ -45,10 +47,10 @@ MainWidget::~MainWidget()
         m_pSrcPathViewModel = 0;
     }
 
-    if (m_pFirstFileViewModel != 0)
+    if (m_pNeedFileViewModel != 0)
     {
-        delete m_pFirstFileViewModel;
-        m_pFirstFileViewModel = 0;
+        delete m_pNeedFileViewModel;
+        m_pNeedFileViewModel = 0;
     }
 
     if (m_pPathOutViewModel != 0)
@@ -60,8 +62,21 @@ MainWidget::~MainWidget()
 
 void MainWidget::AddSrcPath()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"), "./",
+    QString dir = QFileDialog::getExistingDirectory(this, tr("请选择目录"), "./",
                                                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir.isEmpty())
+    {
+        return;
+    }
+
+    //判断是否已经存在
+    for (int n = 0; n < m_cSrcPathList.length(); n++)
+    {
+        if (dir.compare(m_cSrcPathList.at(n)) == 0)
+        {
+            return;
+        }
+    }
 
     m_cSrcPathList.append(dir);
 
@@ -77,28 +92,45 @@ void MainWidget::AddSrcPath()
     m_pListViewSrcPath->setModel(m_pSrcPathViewModel);
 }
 
-void MainWidget::AddFirstFile()
+void MainWidget::AddNeedPath()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Select File"), "./", tr("Head&Src Files (*.h *.c *.cpp)"));
-
-    m_cFirstFileList.append(fileName);
-
-    if (m_pFirstFileViewModel == 0)
+    QString dir = QFileDialog::getExistingDirectory(this, tr("请选择目录"), "./",
+                                                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (dir.isEmpty())
     {
-        m_pFirstFileViewModel = new QStringListModel(m_cFirstFileList);
+        return;
+    }
+
+    //判断是否已经存在
+    for (int n = 0; n < m_cNeedPathList.length(); n++)
+    {
+        if (dir.compare(m_cNeedPathList.at(n)) == 0)
+        {
+            return;
+        }
+    }
+
+    m_cNeedPathList.append(dir);
+
+    //将路径传入m_cListInclude找出所有包含文件
+    m_cListInclude.AddNeededPath(dir);
+
+    //取出所有包含的文件显示出来
+    if (m_pNeedFileViewModel == 0)
+    {
+        m_pNeedFileViewModel = new QStringListModel(m_cListInclude.GetOutAllNeedFiles());
     }
     else
     {
-        m_pFirstFileViewModel->setStringList(m_cFirstFileList);
+        m_pNeedFileViewModel->setStringList(m_cListInclude.GetOutAllNeedFiles());
     }
 
-    m_pListViewFirstFiles->setModel(m_pFirstFileViewModel);
+    m_pListViewNeedFiles->setModel(m_pNeedFileViewModel);
 }
 
 void MainWidget::DirCur()
 {
-    if ((m_cSrcPathList.length() == 0) || (m_cFirstFileList.length() == 0))
+    if ((m_cSrcPathList.length() == 0) || (m_cNeedPathList.length() == 0))
     {
         QMessageBox::information(this, tr("警告"),
                                  tr("请添加文件搜寻路径及初始文件"), QMessageBox::Ok);
@@ -107,41 +139,34 @@ void MainWidget::DirCur()
     }
 
     m_pBtAddSrcPath->setDisabled(true);
-    m_pBtAddFirstFiles->setDisabled(true);
+    m_pBtAddNeedPath->setDisabled(true);
     m_pBtStart->setDisabled(true);
 
     //取出m_cSrcPathList队列中的目录，找出其中的所有文件
-    CListFile listFile;
-    listFile.SeekFileType(CListFile::em_FileType_Head);
+    m_cListFiles.SeekFileType(CListFile::em_FileType_Head);
     for (int n = 0; n < m_cSrcPathList.length(); n++)
     {
-        listFile.AddSrcDir(m_cSrcPathList.at(n));
-        listFile.CheckAndSeek();
-    }
-
-    //取出m_cFirstFileList队列中的文件，找出其包含的头文件
-    CListInclude listIncs;
-    for (int n = 0; n < m_cFirstFileList.length(); n++)
-    {
-        listIncs.AddNeededFile(m_cFirstFileList.at(n));
+        m_cListFiles.AddSrcDir(m_cSrcPathList.at(n));
+        m_cListFiles.CheckAndSeek();
     }
 
     //循环查找各头文件的路径
-    while (listIncs.HasHeadFile())
+    m_cListInclude.FindAllIncludes();
+    while (m_cListInclude.HasHeadFile())
     {
-        QString strHeadFile = listIncs.GetCurHeadFile();
+        QString strHeadFile = m_cListInclude.GetCurHeadFile();
         QString strFileOut;
-        if (listFile.SearchFile(strHeadFile, &strFileOut))
+        if (m_cListFiles.SearchFile(strHeadFile, strFileOut))
         {
-            listIncs.SetCurHeadFilePath(strFileOut);
+            m_cListInclude.SetCurHeadFilePath(strFileOut);
         }
 
-        listIncs.Next();
+        m_cListInclude.Next();
     }
 
     //取出所有已经查找到的头文件的完整路径
     QStringList strList;
-    listIncs.GetOutAllHeadFilePath(strList);
+    m_cListInclude.GetOutAllHeadFilePath(strList);
 
     if (m_pPathOutViewModel == 0)
     {
@@ -157,7 +182,33 @@ void MainWidget::DirCur()
     QMessageBox::information(this, tr("通知"),
                              tr("处理结束"), QMessageBox::Ok);
 
-    m_pBtAddSrcPath->setDisabled(false);
-    m_pBtAddFirstFiles->setDisabled(false);
-    m_pBtStart->setDisabled(false);
+//    m_pBtAddSrcPath->setDisabled(false);
+//    m_pBtAddNeedPath->setDisabled(false);
+//    m_pBtStart->setDisabled(false);
+}
+
+void MainWidget::DelNeedFile(const QModelIndex & index)
+{
+    int nRow = index.row();
+    int nRet = QMessageBox::information(this, tr("警告"),
+                             tr("确定删除此文件吗?"), QMessageBox::Ok|QMessageBox::No, QMessageBox::No);
+
+    if (nRet == QMessageBox::No)
+    {
+        return;
+    }
+
+    m_cListInclude.DeleteNeedFile(nRow);
+
+    //取出所有包含的文件显示出来
+    if (m_pNeedFileViewModel == 0)
+    {
+        m_pNeedFileViewModel = new QStringListModel(m_cListInclude.GetOutAllNeedFiles());
+    }
+    else
+    {
+        m_pNeedFileViewModel->setStringList(m_cListInclude.GetOutAllNeedFiles());
+    }
+
+    m_pListViewNeedFiles->setModel(m_pNeedFileViewModel);
 }

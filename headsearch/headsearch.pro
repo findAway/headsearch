@@ -19,9 +19,15 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwidget.h \
     listfile.h \
-    listinclude.h
+    listinclude.h \
+    ui_mainwidget.h
 
 FORMS    += mainwidget.ui
 
 RESOURCES += \
     icon.qrc
+
+RC_FILE += icon.rc
+
+DISTFILES += \
+    icon.rc

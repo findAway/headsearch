@@ -47,14 +47,14 @@ void CListFile::CheckAndSeek()
     }
 }
 
-bool CListFile::SearchFile(const QString& strFile, QString* pstrFilePathOut)
+bool CListFile::SearchFile(const QString& strFile, QString& strFilePathOut)
 {
     for (int n = 0; n < m_cFileList.length(); n++)
     {
         QString strFilePath = m_cFileList.at(n);
         if (strFilePath.contains(strFile))
         {
-            *pstrFilePathOut = strFilePath;
+            strFilePathOut = strFilePath;
             return true;
         }
     }

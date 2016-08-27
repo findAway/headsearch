@@ -1,5 +1,8 @@
 #include <QFile>
 #include <QByteArray>
+#include <QDir>
+#include <QStringList>
+#include <QFileInfo>
 #include "listinclude.h"
 
 CListInclude::CListInclude()
@@ -16,6 +19,16 @@ CListInclude::~CListInclude()
         m_cHeadFileInfoList.removeFirst();
         if (pHeadFileInfo != 0)
         {
+            while (pHeadFileInfo->refFileList.length() > 0)
+            {
+                THeadRefFile* pRefHeadFile = pHeadFileInfo->refFileList.at(0);
+                pHeadFileInfo->refFileList.removeFirst();
+                if (pRefHeadFile != 0)
+                {
+                    delete pRefHeadFile;
+                }
+            }
+
             delete pHeadFileInfo;
         }
     }
@@ -23,24 +36,66 @@ CListInclude::~CListInclude()
 
 int CListInclude::AddNeededFile(const QString& strFile)
 {
-    int nRet = FindIncludes(strFile);
-    if (nRet == 0)
-    {
-        m_cNeededFileList.append(strFile);
-    }
+    m_cNeededFileList.append(strFile);
+    int nRet = FindIncludes(strFile, m_cNeededFileList.length()-1, true);
 
     return nRet;
 }
 
-int CListInclude::AddExterFile(const QString& strFile)
+int CListInclude::AddNeededPath(const QString& strPath)
 {
-    int nRet = FindIncludes(strFile);
-    if (nRet == 0)
+    QDir* pCurDir = new QDir(strPath);
+    if (!pCurDir->exists())
     {
-        m_cExterFileList.append(strFile);
+        delete pCurDir;
+        pCurDir = 0;
+        return 1;
     }
 
+    pCurDir->setFilter(QDir::Files|QDir::AllDirs|QDir::NoDotAndDotDot);
+    pCurDir->setSorting(QDir::Type);
+
+    QFileInfoList fileInfoList = pCurDir->entryInfoList();
+    for (int n = 0; n < fileInfoList.length(); n++)
+    {
+        QFileInfo fileInfo = fileInfoList.at(n);
+        if (fileInfo.isDir())
+        {
+            AddNeededPath(fileInfo.absoluteFilePath());
+        }
+        else
+        {
+            if (fileInfo.absoluteFilePath().contains(".h") ||
+                    fileInfo.absoluteFilePath().contains(".c") ||
+                    fileInfo.absoluteFilePath().contains(".cc") ||
+                    fileInfo.absoluteFilePath().contains(".cpp"))
+            {
+                m_cNeededFileList.append(fileInfo.absoluteFilePath());
+            }
+        }
+    }
+
+    delete pCurDir;
+    pCurDir = 0;
+
+    return 0;
+}
+
+int CListInclude::AddExterFile(const QString& strFile)
+{
+    m_cExterFileList.append(strFile);
+    int nRet = FindIncludes(strFile, m_cExterFileList.length()-1, false);
+
     return nRet;
+}
+
+void CListInclude::FindAllIncludes()
+{
+    for (int n = 0; n < m_cNeededFileList.length(); n++)
+    {
+        //找出文件中包含的头文件
+        FindIncludes(m_cNeededFileList.at(n), n, true);
+    }
 }
 
 bool CListInclude::HasHeadFile()
@@ -84,6 +139,28 @@ void CListInclude::SeekReset()
     m_nListAtIndex = 0;
 }
 
+const QStringList& CListInclude::GetOutAllNeedFiles()
+{
+//    for (int n = 0; n < m_cHeadFileInfoList.length(); n++)
+//    {
+//        THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(n);
+//        strFilesListOut.append(pHeadFileInfo->strHeadFile);
+//    }
+
+    return m_cNeededFileList;
+}
+
+int CListInclude::DeleteNeedFile(int nFileIndex)
+{
+    if (nFileIndex >= m_cNeededFileList.length())
+    {
+        return 1;
+    }
+
+    m_cNeededFileList.removeAt(nFileIndex);
+    return 0;
+}
+
 void CListInclude::GetOutAllHeadFilePath(QStringList& strPathListOut)
 {
     for (int n = 0; n < m_cHeadFileInfoList.length(); n++)
@@ -100,7 +177,7 @@ void CListInclude::GetOutAllHeadFilePath(QStringList& strPathListOut)
     }
 }
 
-int CListInclude::FindIncludes(const QString& strFile)
+int CListInclude::FindIncludes(const QString& strFile, int nFileIndex, bool bInNeededList)
 {
     QFile file(strFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -166,47 +243,53 @@ int CListInclude::FindIncludes(const QString& strFile)
                     continue;
                 }
 
-                if (bStartMark && (pStartPos != 0) && (buf[n] == 'h'))
+                if (bStartMark && (pStartPos != 0) && (buf[n] == '\"'))
                 {
-                    buf[n+1] = '\0';
+                    buf[n] = '\0';
                     break;
                 }
             }
 
             if (pStartPos != 0)
             {
-                //检查队列中是否存在相同文件名
-                bool bExist = false;
-//                for (int n = 0; n < m_cHeadFileList.length(); n++)
-//                {
-//                    if (m_cHeadFileList.at(n) == pStartPos)
-//                    {
-//                        bExist = true;
-//                        break;
-//                    }
-//                }
+                QStringList splitList = QObject::tr(pStartPos).split("/");
+                QString newHeadFile = splitList.last();
 
-//                if (!bExist)
-//                {
-//                    m_cHeadFileList.append(QString::fromUtf8(pStartPos));
-//                }
+                //检查队列中是否存在相同文件名
+                int nFileInfoIndex = -1;
 
                 for (int n = 0; n < m_cHeadFileInfoList.length(); n++)
                 {
                     THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(n);
-                    if (pHeadFileInfo->strHeadFile == pStartPos)
+                    if (pHeadFileInfo->strHeadFile.compare(newHeadFile) == 0)
                     {
-                        bExist = true;
+                        nFileInfoIndex = n;
                         break;
                     }
                 }
 
-                if (!bExist)
+                if (nFileInfoIndex == -1)
                 {
                     THeadFileInfo* pHeadFileInfo = new THeadFileInfo;
-                    pHeadFileInfo->strHeadFile = QString::fromUtf8(pStartPos);
+
+                    THeadRefFile* pHeadRefFile = new THeadRefFile;
+                    pHeadRefFile->bInNeedList = bInNeededList;
+                    pHeadRefFile->nRefFileIndex = nFileIndex;
+                    pHeadFileInfo->refFileList.append(pHeadRefFile);
+
+                    pHeadFileInfo->strHeadFile = newHeadFile;
                     pHeadFileInfo->bSetPath = false;
+
                     m_cHeadFileInfoList.append(pHeadFileInfo);
+                }
+                else
+                {
+                    THeadFileInfo* pHeadFileInfo = m_cHeadFileInfoList.at(nFileInfoIndex);
+
+                    THeadRefFile* pHeadRefFile = new THeadRefFile;
+                    pHeadRefFile->bInNeedList = bInNeededList;
+                    pHeadRefFile->nRefFileIndex = nFileIndex;
+                    pHeadFileInfo->refFileList.append(pHeadRefFile);
                 }
             }
         }
