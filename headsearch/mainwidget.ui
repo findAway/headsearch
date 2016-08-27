@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>374</width>
-    <height>555</height>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>头文件查找器</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="icon.qrc">
+    <normaloff>:/new/prefix1/icon.png</normaloff>:/new/prefix1/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -48,7 +52,23 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="listViewSrcPath"/>
+      <widget class="QListView" name="listViewSrcPath">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>81</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>81</height>
+        </size>
+       </property>
+       <property name="modelColumn">
+        <number>0</number>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -82,7 +102,20 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="listViewFirstFiles"/>
+      <widget class="QListView" name="listViewFirstFiles">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>121</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>121</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -123,6 +156,8 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -93,6 +93,10 @@ void CListInclude::GetOutAllHeadFilePath(QStringList& strPathListOut)
         {
             strPathListOut.append(pHeadFileInfo->strHeadFilePath);
         }
+        else
+        {
+            strPathListOut.append(pHeadFileInfo->strHeadFile + QObject::tr(" 未查找到"));
+        }
     }
 }
 
@@ -116,7 +120,31 @@ int CListInclude::FindIncludes(const QString& strFile)
         //去掉最后一个换行符
         buf[lineLength - 1] = '\0';
 
-        //查找 #include "headfile.h"
+        //查找 #include ""形式包含的头文件
+        //有效的#include ""语句第一个字符是'#'
+        bool bIncGramma = false;
+        for (unsigned int n = 0; n < strlen(buf); n++)
+        {
+            if (buf[n] != ' ')
+            {
+                if (buf[n] == '#')
+                {
+                    bIncGramma = true;
+                }
+                else
+                {
+                    bIncGramma = false;
+                }
+
+                break;
+            }
+        }
+
+        if (!bIncGramma)
+        {
+            continue;
+        }
+
         QString str(buf);
         if (str.contains("#include") && str.contains("\""))
         {

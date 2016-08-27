@@ -22,3 +22,6 @@ HEADERS  += mainwidget.h \
     listinclude.h
 
 FORMS    += mainwidget.ui
+
+RESOURCES += \
+    icon.qrc

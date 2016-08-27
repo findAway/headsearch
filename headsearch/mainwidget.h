@@ -39,6 +39,7 @@ private:
 
     QStringListModel* m_pSrcPathViewModel;
     QStringListModel* m_pFirstFileViewModel;
+    QStringListModel* m_pPathOutViewModel;
 };
 
 #endif // MAINWIDGET_H
