@@ -14,13 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwidget.cpp \
-    listfile.cpp \
-    listinclude.cpp
+    projectanalyse.cpp
 
 HEADERS  += mainwidget.h \
-    listfile.h \
-    listinclude.h \
-    ui_mainwidget.h
+    ui_mainwidget.h \
+    projectanalyse.h
 
 FORMS    += mainwidget.ui
 

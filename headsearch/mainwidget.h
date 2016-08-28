@@ -5,8 +5,7 @@
 #include <QPushButton>
 #include <QStringListModel>
 #include <QListView>
-#include "listfile.h"
-#include "listinclude.h"
+#include "projectanalyse.h"
 
 namespace Ui {
 class MainWidget;
@@ -48,8 +47,7 @@ private:
     QStringListModel* m_pNeedFileViewModel;
     QStringListModel* m_pPathOutViewModel;
 
-    CListFile    m_cListFiles;
-    CListInclude m_cListInclude;
+    CProjectAnalyse m_cPrjAnalyser;
 };
 
 #endif // MAINWIDGET_H
