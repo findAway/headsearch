@@ -5,6 +5,8 @@
 #include <QString>
 #include <QTextStream>
 
+#define STR2CHAR(str) (str.toLatin1().constData())
+
 class CLogFile
 {
 public:
@@ -12,7 +14,7 @@ public:
     ~CLogFile();
 
     int Open(const QString& file);
-    void Write(const char* szFormat, ...);
+    void WriteLine(const char* szFormat, ...);
 
 private:
     QFile* m_pfile;

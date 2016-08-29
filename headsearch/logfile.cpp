@@ -34,7 +34,7 @@ int CLogFile::Open(const QString& file)
     return 0;
 }
 
-void CLogFile::Write(const char* szFormat, ...)
+void CLogFile::WriteLine(const char* szFormat, ...)
 {
     if (m_pfile == 0)
     {

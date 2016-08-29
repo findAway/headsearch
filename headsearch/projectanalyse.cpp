@@ -34,7 +34,7 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
         m_listPojectPath.append(path);
     }
 
-    m_cLogFile.Write("添加工程文件: %s\n", path.toLatin1().constData());
+    m_cLogFile.WriteLine("添加工程文件: %s", STR2CHAR(path));
 
     return 0;
 }
