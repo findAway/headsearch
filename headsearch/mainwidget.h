@@ -23,10 +23,11 @@ public:
 public slots:
     void AddSrcPath();
     void AddNeedPath();
-    void DirCur();  //列出当前目录文件，包括子目录
+    void StartProc();  //开始处理
+    void ProcFinish(); //处理结束
+
 
     void DelNeedFile(const QModelIndex& index); //删除一项需要的文件
-
     void ShowPathOutInfo(const QModelIndex& index); //输出项的详情
 
 private:

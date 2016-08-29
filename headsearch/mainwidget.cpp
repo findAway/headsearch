@@ -30,7 +30,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     QObject::connect(m_pBtAddSrcPath, SIGNAL(clicked()), this, SLOT(AddSrcPath()));
     QObject::connect(m_pBtAddNeedPath, SIGNAL(clicked()), this, SLOT(AddNeedPath()));
-    QObject::connect(m_pBtStart, SIGNAL(clicked()), this, SLOT(DirCur()));
+    QObject::connect(m_pBtStart, SIGNAL(clicked()), this, SLOT(StartProc()));
 
     QObject::connect(m_pListViewNeedFiles, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(DelNeedFile(QModelIndex)));
     QObject::connect(m_pListViewPathOut, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(ShowPathOutInfo(QModelIndex)));
@@ -106,7 +106,7 @@ void MainWidget::AddNeedPath()
     m_pListViewNeedFiles->setModel(m_pNeedFileViewModel);
 }
 
-void MainWidget::DirCur()
+void MainWidget::StartProc()
 {
     m_pBtAddSrcPath->setEnabled(false);
     m_pBtAddNeedPath->setEnabled(false);
@@ -114,6 +114,12 @@ void MainWidget::DirCur()
 
     m_cPrjAnalyser.Process();
 
+    //连接处理完后的相应
+    QObject::connect(&m_cPrjAnalyser, SIGNAL(finished()), this, SLOT(ProcFinish()));
+}
+
+void MainWidget::ProcFinish()
+{
     //取出所有已经查找到的头文件的完整路径
     QStringList strList;
     m_cPrjAnalyser.GetOutIncludeFiles(strList);

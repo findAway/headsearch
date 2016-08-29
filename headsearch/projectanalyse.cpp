@@ -3,7 +3,7 @@
 #include <QFileInfo>
 #include "projectanalyse.h"
 
-CProjectAnalyse::CProjectAnalyse()
+CProjectAnalyse::CProjectAnalyse(QObject* parent):QThread(parent)
 {
     m_nIncludeFileIndex = 0;
     m_cLogFile.Open(QObject::tr("./projectany.log"));
@@ -11,7 +11,13 @@ CProjectAnalyse::CProjectAnalyse()
 
 CProjectAnalyse::~CProjectAnalyse()
 {
-    m_cLogFile.WriteLine("CProjectAnalyse对象析构");
+    m_cLogFile.WriteLine("退出处理线程");
+    //终止线程
+    terminate();
+    //等待线程退出
+    wait();
+    m_cLogFile.WriteLine("处理线程已退出");
+
     for (int n = 0; n < m_listIncludeFile.length(); n++)
     {
         CHeadFileInfo* pHeadFileInfo = m_listIncludeFile.at(n);
@@ -20,6 +26,8 @@ CProjectAnalyse::~CProjectAnalyse()
             delete pHeadFileInfo;
         }
     }
+
+    m_cLogFile.WriteLine("CProjectAnalyse对象析构");
 }
 
 int CProjectAnalyse::AddProjectPath(const QString& path)
@@ -68,6 +76,14 @@ int CProjectAnalyse::RemoveSearchFile(int fileIndex)
 
 int CProjectAnalyse::Process()
 {
+    start();
+    return 0;
+}
+
+void CProjectAnalyse::run()
+{
+    m_cLogFile.WriteLine("处理线程开始运行");
+
     //找出工程目录下的所有文件加入队列
     m_cLogFile.WriteLine("从工程目录取出所有包含文件，开始");
     for (int n = 0; n < m_listPojectPath.length(); n++)
@@ -85,8 +101,10 @@ int CProjectAnalyse::Process()
     m_cLogFile.WriteLine("从待查找文件取出所有头文件，结束\n");
 
     //从队列m_listIncludeFile中取出头文件，找出头文件的路径
+    //m_cLogFile.WriteLine("m_listIncludeFile队列长度：%d", m_listIncludeFile.length());
     while (m_nIncludeFileIndex <= m_listIncludeFile.length()-1)
     {
+        //m_cLogFile.WriteLine("m_nIncludeFileIndex:%d", m_nIncludeFileIndex);
         CHeadFileInfo* ptHeadFileInfo = m_listIncludeFile.at(m_nIncludeFileIndex);
         m_nIncludeFileIndex++;
         if (ptHeadFileInfo == 0)
@@ -116,7 +134,7 @@ int CProjectAnalyse::Process()
         }
     }
 
-    return 0;
+    m_cLogFile.WriteLine("处理线程退出");
 }
 
 QStringList& CProjectAnalyse::GetProjectPathList()
@@ -134,6 +152,11 @@ void CProjectAnalyse::GetOutIncludeFiles(QStringList& list)
     for (int n = 0; n < m_listIncludeFile.length(); n++)
     {
         CHeadFileInfo* pHeadFileInfo = m_listIncludeFile.at(n);
+        if (pHeadFileInfo == 0)
+        {
+            continue;
+        }
+
         if (pHeadFileInfo->filePath != 0)
         {
             list.append(*(pHeadFileInfo->filePath));

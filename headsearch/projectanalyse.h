@@ -1,22 +1,32 @@
 #ifndef CPROJECTANALYSE_H
 #define CPROJECTANALYSE_H
 
+#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QThread>
 #include "logfile.h"
 
 class CHeadFileInfo
 {
+public:
+    CHeadFileInfo()
+    {
+        filePath = 0;
+    }
+
 public:
     QString fileName;
     const QString* filePath;
     QList<const QString*> listOwnFile;
 };
 
-class CProjectAnalyse
+class CProjectAnalyse : public QThread
 {
+    Q_OBJECT
+
 public:
-    CProjectAnalyse();
+    CProjectAnalyse(QObject* parent = 0);
     ~CProjectAnalyse();
 
     int AddProjectPath(const QString& path);
@@ -29,6 +39,9 @@ public:
     void GetOutIncludeFiles(QStringList& list);
 
     const CHeadFileInfo* GetHeadFileInfo(int index);
+
+protected:
+    void run();  //启用线程处理
 
 private:
     void GetFilesFromPath(const QString& path, QStringList& list);
