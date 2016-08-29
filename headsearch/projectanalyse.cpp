@@ -6,6 +6,7 @@
 CProjectAnalyse::CProjectAnalyse()
 {
     m_nIncludeFileIndex = 0;
+    m_cLogFile.Open(QObject::tr("./projectany.log"));
 }
 
 CProjectAnalyse::~CProjectAnalyse()
@@ -32,6 +33,8 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
     {
         m_listPojectPath.append(path);
     }
+
+    m_cLogFile.Write("添加工程文件: %s\n", path.toLatin1().constData());
 
     return 0;
 }

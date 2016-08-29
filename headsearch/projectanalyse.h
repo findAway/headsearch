@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QStringList>
+#include "logfile.h"
 
 class CHeadFileInfo
 {
@@ -44,6 +45,8 @@ private:
 
     int m_nIncludeFileIndex;
     QList<CHeadFileInfo*> m_listIncludeFile;
+
+    CLogFile    m_cLogFile;
 };
 
 #endif // CPROJECTANALYSE_H

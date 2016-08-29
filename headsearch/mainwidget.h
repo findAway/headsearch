@@ -6,6 +6,7 @@
 #include <QStringListModel>
 #include <QListView>
 #include "projectanalyse.h"
+#include "logfile.h"
 
 namespace Ui {
 class MainWidget;
@@ -48,6 +49,7 @@ private:
     QStringListModel* m_pPathOutViewModel;
 
     CProjectAnalyse m_cPrjAnalyser;
+    CLogFile        m_cLogFile;
 };
 
 #endif // MAINWIDGET_H
