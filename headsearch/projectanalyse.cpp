@@ -11,6 +11,7 @@ CProjectAnalyse::CProjectAnalyse()
 
 CProjectAnalyse::~CProjectAnalyse()
 {
+    m_cLogFile.WriteLine("CProjectAnalyse对象析构");
     for (int n = 0; n < m_listIncludeFile.length(); n++)
     {
         CHeadFileInfo* pHeadFileInfo = m_listIncludeFile.at(n);
@@ -26,6 +27,7 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
     QDir dir(path);
     if (!dir.exists())
     {
+        m_cLogFile.WriteLine("工程路径不存在：%s ", STR2CHAR(path));
         return 1;
     }
 
@@ -34,7 +36,7 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
         m_listPojectPath.append(path);
     }
 
-    m_cLogFile.WriteLine("添加工程文件: %s", STR2CHAR(path));
+    m_cLogFile.WriteLine("添加工程路径: %s", STR2CHAR(path));
 
     return 0;
 }
@@ -47,6 +49,7 @@ int CProjectAnalyse::AddSearchPath(const QString& path)
         return 1;
     }
 
+    m_cLogFile.WriteLine("添加待查找目录：%s", STR2CHAR(path));
     GetFilesFromPath(path, m_listSearchFile);
     return 0;
 }
@@ -58,6 +61,7 @@ int CProjectAnalyse::RemoveSearchFile(int fileIndex)
         return 1;
     }
 
+    m_cLogFile.WriteLine("删除待查找文件：%s", STR2CHAR(m_listSearchFile.at(fileIndex)));
     m_listSearchFile.removeAt(fileIndex);
     return 0;
 }
@@ -65,16 +69,20 @@ int CProjectAnalyse::RemoveSearchFile(int fileIndex)
 int CProjectAnalyse::Process()
 {
     //找出工程目录下的所有文件加入队列
+    m_cLogFile.WriteLine("从工程目录取出所有包含文件，开始");
     for (int n = 0; n < m_listPojectPath.length(); n++)
     {
         GetFilesFromPath(m_listPojectPath.at(n), m_listProjectFiles);
     }
+    m_cLogFile.WriteLine("从工程目录取出所有包含文件，结束\n");
 
     //找出查找文件所包含的头文件加入队列m_listIncludeFile
+    m_cLogFile.WriteLine("从待查找文件取出所有头文件，开始");
     for (int n = 0; n < m_listSearchFile.length(); n++)
     {
         GetIncludeFromFile(m_listSearchFile.at(n));
     }
+    m_cLogFile.WriteLine("从待查找文件取出所有头文件，结束\n");
 
     //从队列m_listIncludeFile中取出头文件，找出头文件的路径
     while (m_nIncludeFileIndex <= m_listIncludeFile.length()-1)
@@ -91,6 +99,7 @@ int CProjectAnalyse::Process()
         if (pFilePath != 0)
         {
             ptHeadFileInfo->filePath = pFilePath;
+            m_cLogFile.WriteLine("找到头文件(%s) %s", STR2CHAR(ptHeadFileInfo->fileName), STR2CHAR(*pFilePath));
             continue;
         }
 
@@ -100,6 +109,8 @@ int CProjectAnalyse::Process()
             ptHeadFileInfo->filePath = pFilePath;
 
             //找到的头文件再次找出其包含的头文件
+            m_cLogFile.WriteLine("找到头文件并加入额外查找队列(%s) %s", STR2CHAR(ptHeadFileInfo->fileName),
+                                 STR2CHAR(*pFilePath));
             m_listSearchFileMore.append(pFilePath);
             GetIncludeFromFile(*pFilePath);
         }
@@ -175,6 +186,18 @@ void CProjectAnalyse::GetFilesFromPath(const QString& path, QStringList& list)
                 if (!IsExist(list, fileInfo.absoluteFilePath()))
                 {
                     list.append(fileInfo.absoluteFilePath());
+                    if (&list == &m_listSearchFile)
+                    {
+                        m_cLogFile.WriteLine("文件加入待查找队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                    }
+                    else if (&list == &m_listProjectFiles)
+                    {
+                        m_cLogFile.WriteLine("文件加入工程文件队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                    }
+                    else
+                    {
+                        m_cLogFile.WriteLine("文件加入未知队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                    }
                 }
             }
         }
@@ -282,6 +305,8 @@ void CProjectAnalyse::GetIncludeFromFile(const QString& file)
                 {
                     CHeadFileInfo* pHeadFileInfo = m_listIncludeFile.at(nSameIndex);
                     pHeadFileInfo->listOwnFile.append(&file);
+                    //m_cLogFile.WriteLine("源文件：%s，包含头文件：%s，已存在", STR2CHAR(file),
+                    //                     STR2CHAR(newHeadFile));
                 }
                 else
                 {
@@ -290,6 +315,8 @@ void CProjectAnalyse::GetIncludeFromFile(const QString& file)
                     pHeadFileInfo->listOwnFile.append(&file);
 
                     m_listIncludeFile.append(pHeadFileInfo);
+                    m_cLogFile.WriteLine("源文件：%s，包含头文件：%s", STR2CHAR(file),
+                                         STR2CHAR(newHeadFile));
                 }
             }
         }

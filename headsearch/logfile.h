@@ -5,7 +5,7 @@
 #include <QString>
 #include <QTextStream>
 
-#define STR2CHAR(str) (str.toLatin1().constData())
+#define STR2CHAR(str) ((str).toLatin1().constData())
 
 class CLogFile
 {
