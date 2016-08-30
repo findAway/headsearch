@@ -4,6 +4,7 @@
 #include <QListView>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QProcess>
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 
@@ -177,16 +178,29 @@ void MainWidget::ShowPathOutInfo(const QModelIndex& index)
     }
     else
     {
-        QString info;
-        info += tr("引用文件：");
-        for (int n = 0; n < pHeadFileInfo->listOwnFile.length(); n++)
+        if (pHeadFileInfo->filePath != 0)
         {
-            info += tr("\n");
-            info += *(pHeadFileInfo->listOwnFile.at(n));
-        }
+            QString info;
+            info += tr("引用文件：");
+            for (int n = 0; n < pHeadFileInfo->listOwnFile.length(); n++)
+            {
+                info += tr("\n");
+                info += *(pHeadFileInfo->listOwnFile.at(n));
+            }
 
-        QMessageBox::information(this, tr("头文件信息"),
-                                 info,
-                                 QMessageBox::Ok);
+            QMessageBox::information(this, tr("头文件信息"),
+                                     info,
+                                     QMessageBox::Ok);
+        }
+        else
+        {
+            QString cmd(QObject::tr("notepad.exe ") + *(pHeadFileInfo->listOwnFile.at(0)));
+            if (!QProcess::startDetached(cmd))
+            {
+                QMessageBox::information(this, tr("警告"),
+                                         QObject::tr("文件打开失败"),
+                                         QMessageBox::Ok);
+            }
+        }
     }
 }

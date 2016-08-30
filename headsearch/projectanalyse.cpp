@@ -11,7 +11,7 @@ CProjectAnalyse::CProjectAnalyse(QObject* parent):QThread(parent)
 
 CProjectAnalyse::~CProjectAnalyse()
 {
-    m_cLogFile.WriteLine("退出处理线程");
+    m_cLogFile.WriteLine("终止处理线程");
     //终止线程
     terminate();
     //等待线程退出
