@@ -117,11 +117,17 @@ void MainWidget::AddNeedPath()
 
 void MainWidget::StartProc()
 {
+    int nRet = m_cPrjAnalyser.Process();
+    if (nRet != 0)
+    {
+        QMessageBox::warning(this, tr("警告"),
+                             tr("工程目录或查找文件未设置"), QMessageBox::Ok);
+        return;
+    }
+
     m_pBtAddSrcPath->setEnabled(false);
     m_pBtAddNeedPath->setEnabled(false);
     m_pBtStart->setEnabled(false);
-
-    m_cPrjAnalyser.Process();
 
     //连接处理完后的相应
     QObject::connect(&m_cPrjAnalyser, SIGNAL(finished()), this, SLOT(ProcFinish()));
@@ -129,10 +135,12 @@ void MainWidget::StartProc()
     //显示通知正在处理
     if (m_pFindingDialog == 0)
     {
-        m_pFindingDialog = new CFinding(this);
+        m_pFindingDialog = new CFinding();
     }
 
-    m_pFindingDialog->setWindowModality(Qt::ApplicationModal);
+    //m_pFindingDialog->setWindowFlags(Qt::FramelessWindowHint);
+    //m_pFindingDialog->setWindowOpacity(1);
+    m_pFindingDialog->setWindowFlags(Qt::CustomizeWindowHint);
     m_pFindingDialog->show();
 }
 
@@ -214,13 +222,40 @@ void MainWidget::ShowPathOutInfo(const QModelIndex& index)
         }
         else
         {
-            QString cmd(QObject::tr("notepad.exe ") + *(pHeadFileInfo->listOwnFile.at(0)));
-            if (!QProcess::startDetached(cmd))
+            do
             {
+                int nChose = QMessageBox::information(this, tr("确定打开下面的文件吗？"),
+                                         *(pHeadFileInfo->listOwnFile.at(0)),
+                                         QMessageBox::Ok|QMessageBox::No);
+                if (nChose != QMessageBox::Ok)
+                {
+                    break;
+                }
+
+                QString cmd = QObject::tr("C:/Program Files/Notepad++/notepad++.exe ");
+                QStringList list;
+                list.append(*(pHeadFileInfo->listOwnFile.at(0)));
+                if (QProcess::startDetached(cmd, list))
+                {
+                    break;
+                }
+
+                cmd = QObject::tr("C:/Program Files (x86)/Notepad++/notepad++.exe ");
+                if (QProcess::startDetached(cmd, list))
+                {
+                    break;
+                }
+
+                cmd = QObject::tr("notepad.exe ") + *(pHeadFileInfo->listOwnFile.at(0));
+                if (QProcess::startDetached(cmd, list))
+                {
+                    break;
+                }
+
                 QMessageBox::information(this, tr("警告"),
                                          QObject::tr("文件打开失败"),
                                          QMessageBox::Ok);
-            }
+            }while(0);
         }
     }
 }

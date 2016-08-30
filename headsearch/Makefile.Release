@@ -130,7 +130,8 @@ compiler_rcc_make_all: release/qrc_icon.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_icon.cpp
 release/qrc_icon.cpp: icon.qrc \
-		icon.png
+		icon.png \
+		head.png
 	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\rcc.exe -name icon icon.qrc -o release\qrc_icon.cpp
 
 compiler_moc_header_make_all: release/moc_mainwidget.cpp release/moc_projectanalyse.cpp release/moc_finding.cpp
@@ -271,8 +272,11 @@ release/moc_mainwidget.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWid
 		logfile.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QFile \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTextStream \
+		finding.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
 		mainwidget.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore mainwidget.h -o release\moc_mainwidget.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore mainwidget.h -o release\moc_mainwidget.cpp
 
 release/moc_projectanalyse.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QObject \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qobject.h \
@@ -350,9 +354,10 @@ release/moc_projectanalyse.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QOb
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qcontiguouscache.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qshareddata.h \
 		projectanalyse.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore projectanalyse.h -o release\moc_projectanalyse.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore projectanalyse.h -o release\moc_projectanalyse.cpp
 
-release/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidget \
+release/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qwindowdefs.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qglobal.h \
@@ -455,7 +460,7 @@ release/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidget
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qtouchdevice.h \
 		finding.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore finding.h -o release\moc_finding.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore finding.h -o release\moc_finding.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -616,6 +621,9 @@ release/main.o: main.cpp mainwidget.h \
 		logfile.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QFile \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTextStream \
+		finding.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QApplication \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qcoreapplication.h \
@@ -777,6 +785,8 @@ release/mainwidget.o: mainwidget.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCor
 		logfile.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QFile \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTextStream \
+		finding.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		ui_mainwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QVariant \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QAction \
@@ -961,7 +971,8 @@ release/logfile.o: logfile.cpp logfile.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\logfile.o logfile.cpp
 
 release/finding.o: finding.cpp finding.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidget \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qwindowdefs.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qglobal.h \
@@ -1078,8 +1089,6 @@ release/finding.o: finding.cpp finding.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qinputmethod.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QButtonGroup \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qbuttongroup.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qgridlayout.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qlayout.h \

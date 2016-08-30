@@ -76,6 +76,12 @@ int CProjectAnalyse::RemoveSearchFile(int fileIndex)
 
 int CProjectAnalyse::Process()
 {
+    if ((m_listPojectPath.length() == 0) || (m_listSearchFile.length() == 0))
+    {
+        m_cLogFile.WriteLine("工程目录或查找文件未设置");
+        return 1;
+    }
+
     start();
     return 0;
 }
