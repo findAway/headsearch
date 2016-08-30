@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwidget.cpp \
     projectanalyse.cpp \
-    logfile.cpp
+    logfile.cpp \
+    finding.cpp
 
 HEADERS  += mainwidget.h \
     ui_mainwidget.h \
     projectanalyse.h \
-    logfile.h
+    logfile.h \
+    finding.h
 
 FORMS    += mainwidget.ui \
     finding.ui

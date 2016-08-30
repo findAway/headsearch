@@ -35,10 +35,18 @@ MainWidget::MainWidget(QWidget *parent) :
 
     QObject::connect(m_pListViewNeedFiles, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(DelNeedFile(QModelIndex)));
     QObject::connect(m_pListViewPathOut, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(ShowPathOutInfo(QModelIndex)));
+
+    m_pFindingDialog = 0;
 }
 
 MainWidget::~MainWidget()
 {
+    if (m_pFindingDialog != 0)
+    {
+        delete m_pFindingDialog;
+        m_pFindingDialog = 0;
+    }
+
     delete ui;
 
     if (m_pSrcPathViewModel != 0)
@@ -117,10 +125,22 @@ void MainWidget::StartProc()
 
     //连接处理完后的相应
     QObject::connect(&m_cPrjAnalyser, SIGNAL(finished()), this, SLOT(ProcFinish()));
+
+    //显示通知正在处理
+    if (m_pFindingDialog == 0)
+    {
+        m_pFindingDialog = new CFinding(this);
+    }
+
+    m_pFindingDialog->setWindowModality(Qt::ApplicationModal);
+    m_pFindingDialog->show();
 }
 
 void MainWidget::ProcFinish()
 {
+    QThread::sleep(1);
+    m_pFindingDialog->hide();
+
     //取出所有已经查找到的头文件的完整路径
     QStringList strList;
     m_cPrjAnalyser.GetOutIncludeFiles(strList);
