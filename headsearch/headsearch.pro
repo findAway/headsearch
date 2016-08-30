@@ -22,7 +22,8 @@ HEADERS  += mainwidget.h \
     projectanalyse.h \
     logfile.h
 
-FORMS    += mainwidget.ui
+FORMS    += mainwidget.ui \
+    finding.ui
 
 RESOURCES += \
     icon.qrc
