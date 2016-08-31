@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>UiHeadFileInfo</class>
+ <widget class="QDialog" name="UiHeadFileInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
-    <height>268</height>
+    <width>475</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>头文件信息</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>头文件</string>
+          <string>头文件名</string>
          </property>
         </widget>
        </item>
@@ -31,11 +31,25 @@
       </layout>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>所在位置</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditHeadFilePath"/>
+       </item>
+      </layout>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>包含此文件的文件</string>
+          <string>包含此头文件的文件</string>
          </property>
         </widget>
        </item>
@@ -55,7 +69,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QListWidget" name="listWidgetFileInfo"/>
+      <widget class="QListView" name="listViewContainFile"/>
      </item>
     </layout>
    </item>

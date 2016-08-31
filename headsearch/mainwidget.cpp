@@ -206,56 +206,81 @@ void MainWidget::ShowPathOutInfo(const QModelIndex& index)
     }
     else
     {
+//        if (pHeadFileInfo->filePath != 0)
+//        {
+//            QString info;
+//            info += tr("引用文件：");
+//            for (int n = 0; n < pHeadFileInfo->listOwnFile.length(); n++)
+//            {
+//                info += tr("\n");
+//                info += *(pHeadFileInfo->listOwnFile.at(n));
+//            }
+
+//            QMessageBox::information(this, tr("头文件信息"),
+//                                     info,
+//                                     QMessageBox::Ok);
+//        }
+//        else
+//        {
+//            do
+//            {
+//                int nChose = QMessageBox::information(this, tr("确定打开下面的文件吗？"),
+//                                         *(pHeadFileInfo->listOwnFile.at(0)),
+//                                         QMessageBox::Ok|QMessageBox::No);
+//                if (nChose != QMessageBox::Ok)
+//                {
+//                    break;
+//                }
+
+//                QString cmd = QObject::tr("C:/Program Files/Notepad++/notepad++.exe ");
+//                QStringList list;
+//                list.append(*(pHeadFileInfo->listOwnFile.at(0)));
+//                if (QProcess::startDetached(cmd, list))
+//                {
+//                    break;
+//                }
+
+//                cmd = QObject::tr("C:/Program Files (x86)/Notepad++/notepad++.exe ");
+//                if (QProcess::startDetached(cmd, list))
+//                {
+//                    break;
+//                }
+
+//                cmd = QObject::tr("notepad.exe ") + *(pHeadFileInfo->listOwnFile.at(0));
+//                if (QProcess::startDetached(cmd, list))
+//                {
+//                    break;
+//                }
+
+//                QMessageBox::information(this, tr("警告"),
+//                                         QObject::tr("文件打开失败"),
+//                                         QMessageBox::Ok);
+//            }while(0);
+//        }
+
+        CHeadFileInfoWin* pHeadInfoWin = new CHeadFileInfoWin();
+        pHeadInfoWin->setWindowFlags(Qt::CustomizeWindowHint|Qt::WindowMaximizeButtonHint|Qt::WindowCloseButtonHint);
+
+        pHeadInfoWin->ShowHeadFile(pHeadFileInfo->fileName);
         if (pHeadFileInfo->filePath != 0)
         {
-            QString info;
-            info += tr("引用文件：");
-            for (int n = 0; n < pHeadFileInfo->listOwnFile.length(); n++)
-            {
-                info += tr("\n");
-                info += *(pHeadFileInfo->listOwnFile.at(n));
-            }
-
-            QMessageBox::information(this, tr("头文件信息"),
-                                     info,
-                                     QMessageBox::Ok);
+            pHeadInfoWin->ShowHeadFilePath(*(pHeadFileInfo->filePath));
         }
         else
         {
-            do
-            {
-                int nChose = QMessageBox::information(this, tr("确定打开下面的文件吗？"),
-                                         *(pHeadFileInfo->listOwnFile.at(0)),
-                                         QMessageBox::Ok|QMessageBox::No);
-                if (nChose != QMessageBox::Ok)
-                {
-                    break;
-                }
-
-                QString cmd = QObject::tr("C:/Program Files/Notepad++/notepad++.exe ");
-                QStringList list;
-                list.append(*(pHeadFileInfo->listOwnFile.at(0)));
-                if (QProcess::startDetached(cmd, list))
-                {
-                    break;
-                }
-
-                cmd = QObject::tr("C:/Program Files (x86)/Notepad++/notepad++.exe ");
-                if (QProcess::startDetached(cmd, list))
-                {
-                    break;
-                }
-
-                cmd = QObject::tr("notepad.exe ") + *(pHeadFileInfo->listOwnFile.at(0));
-                if (QProcess::startDetached(cmd, list))
-                {
-                    break;
-                }
-
-                QMessageBox::information(this, tr("警告"),
-                                         QObject::tr("文件打开失败"),
-                                         QMessageBox::Ok);
-            }while(0);
+            pHeadInfoWin->ShowHeadFilePath(QObject::tr("头文件未找到"));
         }
+
+        QStringList listFiles;
+        for (int n = 0; n < pHeadFileInfo->listOwnFile.length(); n++)
+        {
+            listFiles.append(*(pHeadFileInfo->listOwnFile.at(n)));
+        }
+
+        pHeadInfoWin->ShowContainFiles(listFiles);
+
+        pHeadInfoWin->exec();
+        delete pHeadInfoWin;
+        pHeadInfoWin = 0;
     }
 }

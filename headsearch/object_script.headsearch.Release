@@ -1,0 +1,13 @@
+INPUT(
+./release\main.o
+./release\mainwidget.o
+./release\projectanalyse.o
+./release\logfile.o
+./release\finding.o
+./release\headfileinfo.o
+./release\qrc_icon.o
+./release\moc_mainwidget.o
+./release\moc_projectanalyse.o
+./release\moc_finding.o
+./release\moc_headfileinfo.o
+);

@@ -8,6 +8,7 @@
 #include "projectanalyse.h"
 #include "finding.h"
 #include "logfile.h"
+#include "headfileinfo.h"
 
 namespace Ui {
 class MainWidget;
