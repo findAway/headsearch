@@ -16,16 +16,21 @@ SOURCES += main.cpp\
         mainwidget.cpp \
     projectanalyse.cpp \
     logfile.cpp \
-    finding.cpp
+    finding.cpp \
+    headfileinfo.cpp
 
 HEADERS  += mainwidget.h \
     ui_mainwidget.h \
     projectanalyse.h \
     logfile.h \
-    finding.h
+    finding.h \
+    headfileinfo.h \
+    ui_finding.h \
+    ui_headfileinfo.h
 
 FORMS    += mainwidget.ui \
-    finding.ui
+    finding.ui \
+    headfileinfo.ui
 
 RESOURCES += \
     icon.qrc
