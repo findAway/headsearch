@@ -2,6 +2,8 @@
 #define CFINDING_H
 
 #include <QDialog>
+#include <QTimer>
+#include <QMovie>
 
 namespace Ui {
 class Dialog;
@@ -13,12 +15,15 @@ class CFinding : public QDialog
 public:
     explicit CFinding(QWidget *parent = 0);
 
-signals:
-
 public slots:
+    void TimerOut();
+
+signals:
 
 private:
     Ui::Dialog* ui;
+    QTimer* timer;
+    int     nTimes;
 };
 
 #endif // CFINDING_H

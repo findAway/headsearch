@@ -172,7 +172,7 @@ void MainWidget::DelNeedFile(const QModelIndex & index)
 {
     int nRow = index.row();
     int nRet = QMessageBox::information(this, tr("警告"),
-                                        tr("确定删除此文件吗?"), QMessageBox::Ok|QMessageBox::No, QMessageBox::No);
+                                        tr("确定移除此文件吗?"), QMessageBox::Ok|QMessageBox::No, QMessageBox::No);
 
     if (nRet == QMessageBox::No)
     {
@@ -259,7 +259,8 @@ void MainWidget::ShowPathOutInfo(const QModelIndex& index)
 //        }
 
         CHeadFileInfoWin* pHeadInfoWin = new CHeadFileInfoWin();
-        pHeadInfoWin->setWindowFlags(Qt::CustomizeWindowHint|Qt::WindowMaximizeButtonHint|Qt::WindowCloseButtonHint);
+        pHeadInfoWin->setWindowFlags(Qt::CustomizeWindowHint|Qt::WindowMaximizeButtonHint|
+                                     Qt::WindowCloseButtonHint|Qt::WindowMinimizeButtonHint);
 
         pHeadInfoWin->ShowHeadFile(pHeadFileInfo->fileName);
         if (pHeadFileInfo->filePath != 0)
