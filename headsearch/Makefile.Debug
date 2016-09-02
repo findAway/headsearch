@@ -108,7 +108,7 @@ debug/icon_res.o: icon.rc
 	windres -i icon.rc -o debug\icon_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ "CONFIG+=debug" -o Makefile.Debug headsearch.pro
+	@$(QMAKE) -spec win32-g++ -o Makefile.Debug headsearch.pro
 
 qmake_all: FORCE
 
@@ -281,6 +281,9 @@ debug/moc_mainwidget.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidge
 		finding.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/QMovie \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qmovie.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qimagereader.h \
@@ -300,7 +303,7 @@ debug/moc_mainwidget.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QWidge
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qtextoption.h \
 		mainwidget.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore mainwidget.h -o debug\moc_mainwidget.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore mainwidget.h -o debug\moc_mainwidget.cpp
 
 debug/moc_projectanalyse.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QObject \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qobject.h \
@@ -378,7 +381,7 @@ debug/moc_projectanalyse.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QObje
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qcontiguouscache.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qshareddata.h \
 		projectanalyse.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore projectanalyse.h -o debug\moc_projectanalyse.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore projectanalyse.h -o debug\moc_projectanalyse.cpp
 
 debug/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
@@ -483,6 +486,9 @@ debug/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/QMovie \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qmovie.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qimagereader.h \
@@ -495,7 +501,7 @@ debug/moc_finding.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qjsonvalue.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qfactoryinterface.h \
 		finding.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore finding.h -o debug\moc_finding.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore finding.h -o debug\moc_finding.cpp
 
 debug/moc_headfileinfo.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
@@ -630,7 +636,7 @@ debug/moc_headfileinfo.cpp: C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDia
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QStringListModel \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qstringlistmodel.h \
 		headfileinfo.h
-	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt5_project/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore headfileinfo.h -o debug\moc_headfileinfo.cpp
+	C:\Qt\Qt5.5.1\5.5\mingw492_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.5.1/5.5/mingw492_32/mkspecs/win32-g++ -IE:/qt_projects/headsearch/headsearch -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtANGLE -IC:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore headfileinfo.h -o debug\moc_headfileinfo.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -797,6 +803,9 @@ debug/main.o: main.cpp mainwidget.h \
 		finding.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/QMovie \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qmovie.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qimagereader.h \
@@ -976,6 +985,9 @@ debug/mainwidget.o: mainwidget.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTextStream \
 		finding.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QDialog \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/QMovie \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qmovie.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qimagereader.h \
@@ -1273,6 +1285,9 @@ debug/finding.o: finding.cpp finding.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/QMovie \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qmovie.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtGui/qimagereader.h \
@@ -1488,8 +1503,6 @@ debug/headfileinfo.o: headfileinfo.cpp C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtW
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qheaderview.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QLabel \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qlabel.h \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QSpacerItem \
 		C:/Qt/Qt5.5.1/5.5/mingw492_32/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\headfileinfo.o headfileinfo.cpp

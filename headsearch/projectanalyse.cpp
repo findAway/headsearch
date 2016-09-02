@@ -11,12 +11,12 @@ CProjectAnalyse::CProjectAnalyse(QObject* parent):QThread(parent)
 
 CProjectAnalyse::~CProjectAnalyse()
 {
-    m_cLogFile.WriteLine("终止处理线程");
+    m_cLogFile.WriteLine("term process thread");
     //终止线程
     terminate();
     //等待线程退出
     wait();
-    m_cLogFile.WriteLine("处理线程已退出");
+    m_cLogFile.WriteLine("process thread has quit");
 
     for (int n = 0; n < m_listIncludeFile.length(); n++)
     {
@@ -27,7 +27,7 @@ CProjectAnalyse::~CProjectAnalyse()
         }
     }
 
-    m_cLogFile.WriteLine("CProjectAnalyse对象析构");
+    m_cLogFile.WriteLine("CProjectAnalyse destructor");
 }
 
 int CProjectAnalyse::AddProjectPath(const QString& path)
@@ -35,7 +35,7 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
     QDir dir(path);
     if (!dir.exists())
     {
-        m_cLogFile.WriteLine("工程路径不存在：%s ", STR2CHAR(path));
+        m_cLogFile.WriteLine("the project path nox exist: %s ", STR2CHAR(path));
         return 1;
     }
 
@@ -44,7 +44,7 @@ int CProjectAnalyse::AddProjectPath(const QString& path)
         m_listPojectPath.append(path);
     }
 
-    m_cLogFile.WriteLine("添加工程路径: %s", STR2CHAR(path));
+    m_cLogFile.WriteLine("add project path: %s", STR2CHAR(path));
 
     return 0;
 }
@@ -57,7 +57,7 @@ int CProjectAnalyse::AddSearchPath(const QString& path)
         return 1;
     }
 
-    m_cLogFile.WriteLine("添加待查找目录：%s", STR2CHAR(path));
+    m_cLogFile.WriteLine("add path for search: %s", STR2CHAR(path));
     GetFilesFromPath(path, m_listSearchFile);
     return 0;
 }
@@ -69,7 +69,7 @@ int CProjectAnalyse::RemoveSearchFile(int fileIndex)
         return 1;
     }
 
-    m_cLogFile.WriteLine("删除待查找文件：%s", STR2CHAR(m_listSearchFile.at(fileIndex)));
+    m_cLogFile.WriteLine("delete a search file: %s", STR2CHAR(m_listSearchFile.at(fileIndex)));
     m_listSearchFile.removeAt(fileIndex);
     return 0;
 }
@@ -78,7 +78,7 @@ int CProjectAnalyse::Process()
 {
     if ((m_listPojectPath.length() == 0) || (m_listSearchFile.length() == 0))
     {
-        m_cLogFile.WriteLine("工程目录或查找文件未设置");
+        m_cLogFile.WriteLine("project path or search path not set");
         return 1;
     }
 
@@ -88,26 +88,26 @@ int CProjectAnalyse::Process()
 
 void CProjectAnalyse::run()
 {
-    m_cLogFile.WriteLine("处理线程开始运行");
+    m_cLogFile.WriteLine("thread start run");
 
     //找出工程目录下的所有文件加入队列
-    m_cLogFile.WriteLine("从工程目录取出所有包含文件，开始");
+    m_cLogFile.WriteLine("find all files from project path, start");
     for (int n = 0; n < m_listPojectPath.length(); n++)
     {
         GetFilesFromPath(m_listPojectPath.at(n), m_listProjectFiles);
     }
-    m_cLogFile.WriteLine("从工程目录取出所有包含文件，结束\n");
+    m_cLogFile.WriteLine("find all files from project path, over\n");
 
     //找出查找文件所包含的头文件加入队列m_listIncludeFile
-    m_cLogFile.WriteLine("从待查找文件取出所有头文件，开始");
+    m_cLogFile.WriteLine("get all head files from search files, start");
     for (int n = 0; n < m_listSearchFile.length(); n++)
     {
         GetIncludeFromFile(m_listSearchFile.at(n));
     }
-    m_cLogFile.WriteLine("从待查找文件取出所有头文件，结束\n");
+    m_cLogFile.WriteLine("get all headfile from search files, over\n");
 
     //从队列m_listIncludeFile中取出头文件，找出头文件的路径
-    //m_cLogFile.WriteLine("m_listIncludeFile队列长度：%d", m_listIncludeFile.length());
+    //m_cLogFile.WriteLine("m_listIncludeFile length：%d", m_listIncludeFile.length());
     while (m_nIncludeFileIndex <= m_listIncludeFile.length()-1)
     {
         //m_cLogFile.WriteLine("m_nIncludeFileIndex:%d", m_nIncludeFileIndex);
@@ -123,7 +123,7 @@ void CProjectAnalyse::run()
         if (pFilePath != 0)
         {
             ptHeadFileInfo->filePath = pFilePath;
-            m_cLogFile.WriteLine("找到头文件(%s) %s", STR2CHAR(ptHeadFileInfo->fileName), STR2CHAR(*pFilePath));
+            m_cLogFile.WriteLine("find headfile(%s) %s", STR2CHAR(ptHeadFileInfo->fileName), STR2CHAR(*pFilePath));
             continue;
         }
 
@@ -133,14 +133,14 @@ void CProjectAnalyse::run()
             ptHeadFileInfo->filePath = pFilePath;
 
             //找到的头文件再次找出其包含的头文件
-            m_cLogFile.WriteLine("找到头文件并加入额外查找队列(%s) %s", STR2CHAR(ptHeadFileInfo->fileName),
+            m_cLogFile.WriteLine("find headfile and add to extern list(%s) %s", STR2CHAR(ptHeadFileInfo->fileName),
                                  STR2CHAR(*pFilePath));
             m_listSearchFileMore.append(pFilePath);
             GetIncludeFromFile(*pFilePath);
         }
     }
 
-    m_cLogFile.WriteLine("处理线程退出");
+    m_cLogFile.WriteLine("thread quit...\n");
 }
 
 QStringList& CProjectAnalyse::GetProjectPathList()
@@ -170,7 +170,7 @@ void CProjectAnalyse::GetOutIncludeFiles(QStringList& list)
         }
         else
         {
-            QString str = pHeadFileInfo->fileName + QObject::tr(" 未找到");
+            QString str = pHeadFileInfo->fileName + QObject::tr(" ####NotFound####");
             list.append(str);
         }
     }
@@ -207,25 +207,32 @@ void CProjectAnalyse::GetFilesFromPath(const QString& path, QStringList& list)
         }
         else
         {
-            if (fileInfo.absoluteFilePath().contains(".h") ||
-                    fileInfo.absoluteFilePath().contains(".c") ||
-                    fileInfo.absoluteFilePath().contains(".cc") ||
-                    fileInfo.absoluteFilePath().contains(".cpp"))
+            QStringList splitList = fileInfo.absoluteFilePath().split(".");
+            QString fileSuffix = splitList.last();
+
+//            if (fileInfo.absoluteFilePath().contains(".h") ||
+//                    fileInfo.absoluteFilePath().contains(".c") ||
+//                    fileInfo.absoluteFilePath().contains(".cc") ||
+//                    fileInfo.absoluteFilePath().contains(".cpp"))
+            if (fileSuffix.compare("h") == 0 ||
+                    fileSuffix.compare("c") == 0 ||
+                    fileSuffix.compare("cc") == 0 ||
+                    fileSuffix.compare("cpp") == 0)
             {
                 if (!IsExist(list, fileInfo.absoluteFilePath()))
                 {
                     list.append(fileInfo.absoluteFilePath());
                     if (&list == &m_listSearchFile)
                     {
-                        m_cLogFile.WriteLine("文件加入待查找队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                        m_cLogFile.WriteLine("file add to search list: %s", STR2CHAR(fileInfo.absoluteFilePath()));
                     }
                     else if (&list == &m_listProjectFiles)
                     {
-                        m_cLogFile.WriteLine("文件加入工程文件队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                        m_cLogFile.WriteLine("file add to project file list: %s", STR2CHAR(fileInfo.absoluteFilePath()));
                     }
                     else
                     {
-                        m_cLogFile.WriteLine("文件加入未知队列：%s", STR2CHAR(fileInfo.absoluteFilePath()));
+                        m_cLogFile.WriteLine("file add to unknow list: %s", STR2CHAR(fileInfo.absoluteFilePath()));
                     }
                 }
             }
@@ -344,7 +351,7 @@ void CProjectAnalyse::GetIncludeFromFile(const QString& file)
                     pHeadFileInfo->listOwnFile.append(&file);
 
                     m_listIncludeFile.append(pHeadFileInfo);
-                    m_cLogFile.WriteLine("源文件：%s，包含头文件：%s", STR2CHAR(file),
+                    m_cLogFile.WriteLine("file: %s，include headfile: %s", STR2CHAR(file),
                                          STR2CHAR(newHeadFile));
                 }
             }

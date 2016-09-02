@@ -129,6 +129,9 @@ void MainWidget::StartProc()
     m_pBtAddNeedPath->setEnabled(false);
     m_pBtStart->setEnabled(false);
 
+    //m_pListViewSrcPath->setEnabled(false);
+    //m_pListViewNeedFiles->setEnabled(false);
+
     //连接处理完后的相应
     QObject::connect(&m_cPrjAnalyser, SIGNAL(finished()), this, SLOT(ProcFinish()));
 
@@ -139,7 +142,7 @@ void MainWidget::StartProc()
     }
 
     //m_pFindingDialog->setWindowFlags(Qt::FramelessWindowHint);
-    //m_pFindingDialog->setWindowOpacity(1);
+    m_pFindingDialog->setWindowModality(Qt::ApplicationModal);
     m_pFindingDialog->setWindowFlags(Qt::CustomizeWindowHint);
     m_pFindingDialog->show();
 }
